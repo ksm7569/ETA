@@ -121,7 +121,7 @@ public class MapActivity extends AppCompatActivity {
         // 길찾기 시작 버튼
         buttonStartRoute.setOnClickListener(v -> {
             if (startAddr != null && endAddr != null) {
-                Intent intent = new Intent(this, RouteMapActivity.class);
+                Intent intent = new Intent(this, MapRouteActivity.class);
                 intent.putExtra("start", startAddr);
                 intent.putExtra("end", endAddr);
                 intent.putExtra("nickname", nickname);
