@@ -176,6 +176,7 @@ public class ChatActivity extends AppCompatActivity {
                 Intent intent = new Intent(this, MapActivity.class);
                 intent.putExtra("nickname", nickname);
                 intent.putExtra("userId", currentUserId);
+                intent.putExtra("roomId", chatRoomId);
                 startActivity(intent);
                 hideQuickMenu();
                 Toast.makeText(this, "지도를 실행합니다", Toast.LENGTH_SHORT).show();
@@ -195,6 +196,14 @@ public class ChatActivity extends AppCompatActivity {
         LinearLayout menuDeparture = findViewById(R.id.menu_departure);
         menuDeparture.setOnClickListener(v -> {
             Toast.makeText(this, "출발 기능은 개발 중입니다", Toast.LENGTH_SHORT).show();
+            hideQuickMenu();
+        });
+
+        // 친구위치 버튼 (아이콘만)
+        LinearLayout menuMapFriends = findViewById(R.id.menu_mapFriends);
+        menuMapFriends.setOnClickListener(v -> {
+            Intent intent = new Intent(this, MapFriendsActivity.class);
+            startActivity(intent);
             hideQuickMenu();
         });
     }

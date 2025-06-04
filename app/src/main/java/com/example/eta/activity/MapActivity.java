@@ -5,14 +5,18 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.eta.R;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class MapActivity extends AppCompatActivity {
 
@@ -30,6 +34,8 @@ public class MapActivity extends AppCompatActivity {
     private String startAddr;
     private String nickname;
     private String userId;
+    private String chatRoomId;
+    private DatabaseReference mDatabase;
 
     // ActivityResultLauncher들
     private final ActivityResultLauncher<Intent> destinationLauncher =
@@ -42,6 +48,13 @@ public class MapActivity extends AppCompatActivity {
                             String locationName = data.getStringExtra("locationName");
                             textDestination.setText(locationName != null ? locationName : "목적지 선택됨");
                             Log.d(TAG, "목적지 받음: " + endAddr);
+                            String messageId = mDatabase.child("chatRooms").child(chatRoomId).child("endPoint").push().getKey();
+                            if (messageId != null) {
+                                mDatabase.child("chatRooms").child(chatRoomId).child("endPoint").setValue(endAddr)
+                                        .addOnFailureListener(e ->
+                                                Toast.makeText(MapActivity.this, "메시지 전송 실패: " + e.getMessage(), Toast.LENGTH_SHORT).show()
+                                        );
+                            }
                             updateRouteButton();
                         }
                     });
@@ -64,7 +77,7 @@ public class MapActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
-
+        mDatabase = FirebaseDatabase.getInstance().getReference();
         // 액션바 설정
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle("길찾기");
@@ -79,6 +92,7 @@ public class MapActivity extends AppCompatActivity {
     private void getIntentData() {
         nickname = getIntent().getStringExtra("nickname");
         userId = getIntent().getStringExtra("userId");
+        chatRoomId = getIntent().getStringExtra("roomId");
     }
 
     private void initViews() {
@@ -120,17 +134,52 @@ public class MapActivity extends AppCompatActivity {
 
         // 길찾기 시작 버튼
         buttonStartRoute.setOnClickListener(v -> {
-            if (startAddr != null && endAddr != null) {
-                Intent intent = new Intent(this, RouteMapActivity.class);
-                intent.putExtra("start", startAddr);
-                intent.putExtra("end", endAddr);
-                intent.putExtra("nickname", nickname);
-                intent.putExtra("userId", userId);
-                startActivity(intent);
+            endPointNaming();
+
+        });
+    }
+    private void endPointNaming() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("목적지를 뭐라고 부를까요?");
+
+        final EditText input = new EditText(this);
+        input.setHint("약속 장소의 이름을 알려주세요");
+        input.setTextColor(getResources().getColor(R.color.text_primary));
+        input.setHintTextColor(getResources().getColor(R.color.text_secondary));
+        input.setBackgroundColor(getResources().getColor(R.color.surface_color));
+        builder.setView(input);
+
+        builder.setPositiveButton("확인", (dialog, which) -> {
+            String endName = input.getText().toString().trim();
+            if (!endName.isEmpty()) {
+                String messageId = mDatabase.child("chatRooms").child(chatRoomId).child("endName").push().getKey();
+                if (messageId != null) {
+                    mDatabase.child("chatRooms").child(chatRoomId).child("endName").setValue(endName)
+                            .addOnFailureListener(e ->
+                                    Toast.makeText(MapActivity.this, "메시지 전송 실패: " + e.getMessage(), Toast.LENGTH_SHORT).show()
+                            );
+                }
+                if (startAddr != null && endAddr != null) {
+                    Intent intent = new Intent(this, MapRouteActivity.class);
+                    intent.putExtra("start", startAddr);
+                    intent.putExtra("end", endAddr);
+                    intent.putExtra("nickname", nickname);
+                    intent.putExtra("userId", userId);
+                    intent.putExtra("roomId", chatRoomId);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(this, "출발지와 목적지를 모두 선택해주세요", Toast.LENGTH_SHORT).show();
+                }
             } else {
-                Toast.makeText(this, "출발지와 목적지를 모두 선택해주세요", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "채팅방 이름을 입력해주세요", Toast.LENGTH_SHORT).show();
             }
         });
+
+        builder.setNegativeButton("취소", (dialog, which) -> dialog.cancel());
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.getWindow().setBackgroundDrawableResource(R.color.surface_color);
+        alertDialog.show();
     }
 
     private void updateRouteButton() {

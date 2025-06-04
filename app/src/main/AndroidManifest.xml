@@ -4,6 +4,8 @@
 
     <!-- Firebase 사용을 위한 인터넷 권한 추가 -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -27,7 +29,9 @@
             </intent-filter>
         </activity>
 
-
+        <activity
+            android:name=".activity.MapFriendsActivity"
+            android:exported="false" />
         <activity
             android:name=".activity.AppointmentListActivity"
             android:exported="false" />
@@ -43,7 +47,7 @@
             android:exported="false" />
 
         <activity
-            android:name=".activity.RouteMapActivity"
+            android:name=".activity.MapRouteActivity"
             android:exported="false" />
         <receiver
             android:name=".receiver.AlarmReceiver"
