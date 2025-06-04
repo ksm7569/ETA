@@ -56,6 +56,13 @@ public class MapFriendsActivity extends AppCompatActivity {
             JsonObject response = JsonParser.parseString(jsonStr).getAsJsonObject();
             initViews();
             initTMap();
+
+            String jsonStr2= jr.loadJSONFromAsset(this, "reute3.json");
+            JsonObject response2 = JsonParser.parseString(jsonStr2).getAsJsonObject();
+            TMapPoint gps = new TMapPoint(37.50769852620036, 127.10253757684634);
+            drawOnLine(response2, gps, "a");
+
+
             drawOnMap(response);
             return insets;
         });
@@ -87,6 +94,63 @@ public class MapFriendsActivity extends AppCompatActivity {
             this.distance = distance;
             this.time = time;
             this.route = route;
+        }
+    }
+
+    private void drawOnLine(JsonObject response, TMapPoint gps, String name) {
+        TMapMarkerItem markergps = new TMapMarkerItem();
+        markergps.setTMapPoint(gps);
+        tMapView.removeMarkerItem("markergps" + name);
+        tMapView.addMarkerItem("markergps" + name, markergps);
+        // 폴리라인 그리기
+        TMapPolyLine poly = new TMapPolyLine();
+        poly.setLineColor(getResources().getColor(R.color.button_primary));
+        poly.setLineWidth(8);
+
+        try {
+            JsonObject itinerary = response.getAsJsonObject("metaData")
+                    .getAsJsonObject("plan")
+                    .getAsJsonArray("itineraries")
+                    .get(0)
+                    .getAsJsonObject();
+
+            int totalTime = itinerary.get("totalTime").getAsInt();
+            JsonArray legs = itinerary.getAsJsonArray("legs");
+
+            for (JsonElement legElement : legs) {
+                JsonObject leg = legElement.getAsJsonObject();
+                String lineString = null;
+
+                if (leg.has("passShape")) {
+                    lineString = leg.getAsJsonObject("passShape").get("linestring").getAsString();
+                } else if (leg.has("steps")) {
+                    JsonArray steps = leg.getAsJsonArray("steps");
+                    for (JsonElement stepElement : steps) {
+                        JsonObject step = stepElement.getAsJsonObject();
+                        if (step.has("linestring")) {
+                            lineString = step.get("linestring").getAsString();
+                            break;
+                        }
+                    }
+                }
+
+                if (lineString != null) {
+                    for (String coordinate : lineString.split(" ")) {
+                        String[] coords = coordinate.split(",");
+                        if (coords.length >= 2) {
+                            double lon = Double.parseDouble(coords[0].trim());
+                            double lat = Double.parseDouble(coords[1].trim());
+                            poly.addLinePoint(new TMapPoint(lat, lon));
+                        }
+                    }
+                }
+            }
+
+            tMapView.addTMapPolyLine("reute"+name, poly);
+
+        } catch (Exception e) {
+            Log.e(TAG, "라인 추가 실패", e);
+            Toast.makeText(this, "라인 표시에 실패했습니다", Toast.LENGTH_SHORT).show();
         }
     }
 
