@@ -176,6 +176,7 @@ public class ChatActivity extends AppCompatActivity {
                 Intent intent = new Intent(this, MapActivity.class);
                 intent.putExtra("nickname", nickname);
                 intent.putExtra("userId", currentUserId);
+                intent.putExtra("roomId", chatRoomId);
                 startActivity(intent);
                 hideQuickMenu();
                 Toast.makeText(this, "지도를 실행합니다", Toast.LENGTH_SHORT).show();

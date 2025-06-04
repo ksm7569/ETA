@@ -19,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.example.eta.R;
+import com.example.eta.service.MapDBInsertService;
 import com.example.eta.util.Keyholder;
 import com.example.eta.util.LocationHelper; // 수정된 LocationHelper 사용
 import com.example.eta.util.LocationResultListener;
@@ -60,6 +61,7 @@ public class MapRouteActivity extends AppCompatActivity implements LocationResul
     private String endAddr;
     private String nickname; // 사용되지 않으면 제거 가능
     private String userId;   // 사용되지 않으면 제거 가능
+    private String chatRoomId;
     private TMapPoint startPoint;
     private TMapPoint endPoint;
 
@@ -69,6 +71,8 @@ public class MapRouteActivity extends AppCompatActivity implements LocationResul
 
     // 네트워크 (경로 안내 관련 - ETA 스타일 유지)
     private RouteService routeService;
+
+    MapDBInsertService mapDBInsertService;
 
     // Retrofit 인터페이스 (경로 안내 관련 - ETA 스타일 유지)
     interface RouteService {
@@ -84,6 +88,7 @@ public class MapRouteActivity extends AppCompatActivity implements LocationResul
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_route_map);
+        mapDBInsertService = new MapDBInsertService();
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle("경로 안내");
@@ -151,7 +156,9 @@ public class MapRouteActivity extends AppCompatActivity implements LocationResul
         startAddr = intent.getStringExtra("start");
         nickname = intent.getStringExtra("nickname");
         userId = intent.getStringExtra("userId");
+        chatRoomId = intent.getStringExtra("roomId");
         Log.d(TAG, "받은 데이터 - 출발지: " + startAddr + ", 도착지: " + endAddr);
+        Log.d(TAG, "받은 데이터 - 방 ID: " + chatRoomId + ", 유져ID: " + userId + ", 닉네임: " + nickname);
     }
 
     // 경로 안내 관련 (ETA 스타일 유지)
@@ -195,9 +202,10 @@ public class MapRouteActivity extends AppCompatActivity implements LocationResul
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 if (response.isSuccessful() && response.body() != null) {
+                    mapDBInsertService.insert(chatRoomId, userId, response.body().toString());
                     drawOnMap(startPoint, endPoint, response.body()); // ETA 기존 drawOnMap 호출
                 } else {
-                    Log.e(TAG, "Route API 실패: " + response.code() + " " + response.message());
+                    Log.e(TAG, "Route API 실패: " + response.code() + "Route"+userId + response.message());
                     Toast.makeText(MapRouteActivity.this, "경로 계산에 실패했습니다", Toast.LENGTH_SHORT).show();
                 }
             }
