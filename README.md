@@ -21,10 +21,11 @@
 
 | **오성민** | **박노혁** | **김상민** |
 | :------: |  :------: | :------: | 
-| [<img src="https://avatars.githubusercontent.com/u/106502312?v=4"(https://avatars.githubusercontent.com/u/201106691?s=64&v=4)" height=100 width=100><br/> @Oseongmin614](https://github.com/Oseongmin614) | [<img src="https://avatars.githubusercontent.com/u/115188037?v=4"(https://avatars.githubusercontent.com/u/201468248?s=64&v=4)" height=100 width=100><br/>@NoHyeokPark]https://github.com/NoHyeokPark)|[<img src="https://avatars.githubusercontent.com/u/134168412?v=4" height=100 width=100><br/> @ksm7569](https://github.com/ksm7569) |
-
+| [<img src="https://avatars.githubusercontent.com/u/106502312?v=4" height=100 width=100><br/> @Oseongmin614](https://github.com/Oseongmin614) | [<img src="https://avatars.githubusercontent.com/u/115188037?v=4" height=100 width=100><br/> @NoHyeokPark](https://github.com/NoHyeokPark) | [<img src="https://avatars.githubusercontent.com/u/134168412?v=4" height=100 width=100><br/> @ksm7569](https://github.com/ksm7569) |
+| :------: |  :------: | :------: | 
+| Main,Chat,Firebase 연동, 실시간 데이터 처리| Map, |Alarm|
 </div>
-https://avatars.githubusercontent.com/u/201468248?s=64&v=4
+
 <br>
 <br>
 
@@ -59,9 +60,10 @@ UI의 초기 디자인은 **Figma**를 활용하여 설계하였고, 버전 관�
 <br>
 
 ## 개발목표
--팀 프로젝트 협업 역량 강화
+- 팀 프로젝트 협업 역량 강화
 GitHub 브랜치 전략을 바탕으로 효율적인 협업과 버전 관리 실습
+기술 스택 역량 확장 - Full-stack 개발 경험
 팀프로젝트 협업을 하면서 커뮤니케이션 향상
-전통적인 개발프로세스 경험
+전통적인 개발프로세스 경험/체득 - 요구사항 정의서,ERD,UI/UX 설계서 등등 각 단계에 맞는 문서작성
 
 
