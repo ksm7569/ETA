@@ -21,9 +21,9 @@
 
 | **오성민** | **박노혁** | **김상민** |
 | :------: |  :------: | :------: | 
-| [<img src="https://avatars.githubusercontent.com/u/106502312?v=4" height=100 width=100><br/> @Oseongmin614](https://github.com/Oseongmin614) | [<img src="https://avatars.githubusercontent.com/u/115188037?v=4" height=100 width=100><br/> @NoHyeokPark](https://github.com/NoHyeokPark) | [<img src="https://avatars.githubusercontent.com/u/134168412?v=4" height=100 width=100><br/> @ksm7569](https://github.com/ksm7569) |
+| [<img src="https://avatars.githubusercontent.com/u/106502312?v=4" height=100 width=100><br/> @Oseongmin614](https://github.com/Oseongmin614) | [<img src="https://avatars.githubusercontent.com/u/201468248?s=400&u=d10f632602283d5b40126d64f29096c8f110bb22&v=4" height=100 width=100><br/> @NoHyeokPark](https://github.com/NoHyeokPark) | [<img src="https://avatars.githubusercontent.com/u/134168412?v=4" height=100 width=100><br/> @ksm7569](https://github.com/ksm7569) |
 | :------: |  :------: | :------: | 
-| Main,Chat,Firebase 연동, 실시간 데이터 처리| Map, 지도 api, 자연어처리 Fast api, GPS |Alarm|
+| Main,Chat,Firebase 연동, 실시간 데이터 처리| Map, 경로 api, 자연어처리 Fast api, GPS |Alarm|
 </div>
 
 <br>
